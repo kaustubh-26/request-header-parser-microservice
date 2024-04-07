@@ -16,8 +16,14 @@ app.get('/', function (req, res) {
 
 // endpoint - /api/whoami
 app.get('/api/whoami', function (req, res) {
+  let remoteAddress = req.socket.remoteAddress;
+  // Check if the remote address is IPv4
+  if (remoteAddress.includes(':')) {
+    // Remove the IPv6 prefix
+    remoteAddress = remoteAddress.substring(7);
+  }
   res.json({
-    ipaddress: req.socket.remoteAddress,
+    ipaddress: remoteAddress,
     language: req.headers['accept-language'],
     software: req.headers['user-agent'],
   });
